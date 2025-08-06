@@ -69,10 +69,37 @@
             transition: all 0.3s ease;
             position: relative;
             backdrop-filter: blur(10px); /* Modern glassmorphism effect */
+            display: flex;
+            flex-direction: column;
         }
 
         .chat-box:hover {
             box-shadow: 0 6px 20px rgba(255, 165, 0, 0.5);
+        }
+
+        .chat-history {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-message {
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: rgba(255, 165, 0, 0.3);
+            align-self: flex-end;
+        }
+
+        .ai-message {
+            background-color: rgba(0, 122, 51, 0.3); /* Green for AI responses, tying into SA flag */
+            align-self: flex-start;
         }
 
         .chat-input {
@@ -130,15 +157,64 @@
         <img src="biltong.jpg" alt="Biltong AI Logo" class="logo">
     </div>
     <div class="chat-box">
-        <textarea class="chat-input" placeholder="Chat wif Biltong.ai"></textarea>
+        <div class="chat-history" id="chat-history"></div>
+        <textarea class="chat-input" id="chat-input" placeholder="Chat wif Biltong.ai"></textarea>
     </div>
     <div class="footer">
         <p class="proud-text"></p>
     </div>
 
     <script>
-        // Simple JS to handle placeholder disappearance (though CSS handles most)
-        const chatInput = document.querySelector('.chat-input');
+        const chatInput = document.getElementById('chat-input');
+        const chatHistory = document.getElementById('chat-history');
+        const apiKey = 'YOUR_GEMINI_API_KEY_HERE'; // Replace with your actual Gemini API key
+        const geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + apiKey;
+
+        chatInput.addEventListener('keydown', async (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                const message = chatInput.value.trim();
+                if (message) {
+                    // Add user message to history
+                    addMessageToHistory(message, 'user');
+                    chatInput.value = '';
+
+                    // Call Gemini API
+                    try {
+                        const response = await fetch(geminiApiUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: message }] }],
+                            }),
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('API request failed');
+                        }
+
+                        const data = await response.json();
+                        const aiResponse = data.candidates[0].content.parts[0].text;
+                        addMessageToHistory(aiResponse, 'ai');
+                    } catch (error) {
+                        console.error('Error calling Gemini API:', error);
+                        addMessageToHistory('Eish, something went wrong with the AI response. System is offline', 'ai');
+                    }
+                }
+            }
+        });
+
+        function addMessageToHistory(text, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', type + '-message');
+            messageDiv.textContent = text;
+            chatHistory.appendChild(messageDiv);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        // Handle placeholder (existing code)
         chatInput.addEventListener('focus', () => {
             chatInput.placeholder = '';
         });
