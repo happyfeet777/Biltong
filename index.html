@@ -85,11 +85,15 @@
             outline: none;
             resize: none;
             overflow: auto;
+            text-align: center; /* Centers the text horizontally */
+            padding-top: 15px; /* Shifts it down one line for better vertical positioning */
+            box-sizing: border-box;
         }
 
         .chat-input::placeholder {
             color: rgba(255, 255, 255, 0.5); /* Subtle placeholder text */
             font-style: italic;
+            text-align: center; /* Centers the placeholder too */
         }
 
         .chat-input:focus::placeholder {
@@ -128,7 +132,9 @@
     <div class="chat-box">
         <textarea class="chat-input" placeholder="Chat wif Biltong.ai"></textarea>
     </div>
-
+    <div class="footer">
+        <p class="proud-text"></p>
+    </div>
 
     <script>
         // Simple JS to handle placeholder disappearance (though CSS handles most)
