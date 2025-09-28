@@ -150,11 +150,19 @@
                 width: 90%;
             }
         }
+
+        /* Optional: make the anchor around the logo look clean */
+        .logo-link {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <div class="logo-container">
-        <img src="biltong.jpg" alt="Biltong AI Logo" class="logo">
+        <!-- Wrap the logo in a link to practice.html -->
+        <a href="practice.html" title="Open 7‑Day Practice Plan" class="logo-link">
+            <img src="biltong.jpg" alt="Biltong AI Logo" class="logo">
+        </a>
     </div>
     <div class="chat-box">
         <div class="chat-history" id="chat-history"></div>
@@ -196,7 +204,7 @@
                         }
 
                         const data = await response.json();
-                        const aiResponse = data.candidates[0].content.parts[0].text;
+                        const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No response';
                         addMessageToHistory(aiResponse, 'ai');
                     } catch (error) {
                         console.error('Error calling Gemini API:', error);
