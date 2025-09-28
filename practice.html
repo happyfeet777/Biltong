@@ -1,73 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>7-Day Practice Plan</title>
-  <!-- If your index.html references a stylesheet, mirror it here -->
-  <link rel="stylesheet" href="styles.css" />
+  <title>7-Day Practice Plan • Biltong AI</title>
   <style>
-    /* Optional light defaults in case there’s no styles.css or to blend in */
-    :root { --maxw: 900px; }
-    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.6; color: #222; }
-    header, footer { padding: 16px 20px; }
-    main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 64px; }
-    h1, h2, h3 { line-height: 1.25; }
-    .breadcrumbs { font-size: 0.9rem; opacity: 0.8; margin-bottom: 12px; }
-    .card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
-    .day { margin: 20px 0; }
-    .day h3 { margin: 0 0 6px; }
-    .day small { color: #666; }
-    .list { margin: 10px 0 0 18px; }
-    .tagline { margin-top: 4px; color: #444; }
-    a.button { display: inline-block; margin-top: 16px; padding: 10px 14px; border-radius: 8px; border: 1px solid #ddd; text-decoration: none; color: inherit; }
-    @media (prefers-color-scheme: dark) {
-      body { background: #0b0b0c; color: #e9e9ea; }
-      .card { background: #121214; border-color: #202024; }
-      a.button { border-color: #303036; }
-      .breadcrumbs { color: #b7b7ba; }
+    /* Base theme matching index.html */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #000000;
+      font-family: 'Arial', sans-serif;
+      color: #ffffff;
+      min-height: 100vh;
+      position: relative;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg,
+          rgba(0,0,0,0.8),
+          rgba(222,41,16,0.1),
+          rgba(0,122,51,0.1),
+          rgba(0,35,102,0.1),
+          rgba(252,209,22,0.1)
+      );
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 20px 64px;
+    }
+
+    /* Header */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 0;
+    }
+    .logo {
+      height: 40px;
+      width: auto;
+      filter: drop-shadow(0 0 12px rgba(255,165,0,0.4));
+      vertical-align: middle;
+    }
+    .brand {
+      font-weight: bold;
+      letter-spacing: 0.3px;
+    }
+
+    .back {
+      margin-left: auto;
+      text-decoration: none;
+      color: #ffd700;
+      border: 1px solid #ffd700;
+      padding: 8px 12px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+    .back:hover {
+      background: rgba(255,215,0,0.12);
+      box-shadow: 0 0 12px rgba(255,165,0,0.35);
+    }
+
+    /* Title */
+    h1 {
+      margin: 10px 0 6px;
+      font-size: 1.9rem;
+      line-height: 1.25;
+      text-shadow: 0 0 12px rgba(255,165,0,0.2);
+    }
+    .tagline {
+      color: #ffd700;
+      font-size: 1rem;
+      margin-bottom: 18px;
+      opacity: 0.95;
+    }
+
+    /* Card styling to mirror glassy chat box */
+    .card {
+      background-color: rgba(255,255,255,0.08);
+      border: 2px solid #ffd700;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(255,165,0,0.3);
+      backdrop-filter: blur(10px);
+      transition: box-shadow 0.3s ease;
+      padding: 18px;
+    }
+    .card:hover {
+      box-shadow: 0 6px 20px rgba(255,165,0,0.5);
+    }
+
+    /* Sections */
+    .day {
+      border-left: 4px solid rgba(0,122,51,0.6); /* green accent like AI message */
+      padding: 10px 14px;
+      margin: 16px 0;
+      background: rgba(0,122,51,0.10);
+      border-radius: 12px;
+    }
+    .day h3 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+    }
+    .meta {
+      font-size: 0.92rem;
+      color: #cfcfcf;
+      margin-bottom: 6px;
+    }
+    ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+    li {
+      margin: 6px 0;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      color: #ffd700;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container { padding: 12px 14px 48px; }
+      h1 { font-size: 1.5rem; }
+      .day { padding: 10px 12px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <!-- If your index has a nav/header, paste the same markup here to match theme -->
-    <a href="index.html" class="button">← Back</a>
-  </header>
+  <div class="container">
+    <div class="topbar">
+      <img src="biltong.jpg" alt="Biltong AI" class="logo" />
+      <div class="brand">Biltong AI</div>
+      <a href="index.html" class="back" title="Back to chat">← Back</a>
+    </div>
 
-  <main>
-    <div class="breadcrumbs">Home / 7-Day Practice Plan</div>
-    <h1>7-Day Practice Plan</h1>
-    <p class="tagline">10–20 minutes a day to integrate “You are awareness, not the story of a self.”</p>
+    <h1>7‑Day Practice Plan</h1>
+    <div class="tagline">10–20 minutes a day to live from awareness, not the story of a fixed self.</div>
 
     <div class="card">
       <section class="day">
         <h3>Day 1: Thought labeling and pausing</h3>
-        <ul class="list">
-          <li>Practice (10x): When a thought arises, pause 5–10 seconds and label it: “planning,” “worry,” “judgment,” “memory.”</li>
+        <div class="meta">Practice 10× today</div>
+        <ul>
+          <li>When a thought arises, pause 5–10 seconds and label it: “planning,” “worry,” “judgment,” “memory.”</li>
           <li>Notice tone and body sensations. In the evening, journal one paragraph on what changed when you paused.</li>
         </ul>
       </section>
 
       <section class="day">
         <h3>Day 2: Emotion as weather</h3>
-        <ul class="list">
+        <ul>
           <li>When a strong emotion appears, widen attention to breath, posture, and peripheral sounds. Label the emotion and 2 body sensations.</li>
-          <li>Take one small, values-aligned step regardless of the story (e.g., send the email, take a walk). Journal the effect.</li>
+          <li>Take one small, values‑aligned step regardless of the story (e.g., send the email, take a walk). Journal the effect.</li>
         </ul>
       </section>
 
       <section class="day">
         <h3>Day 3: Condition engineering</h3>
-        <ul class="list">
+        <ul>
           <li>Pick one unhelpful loop (e.g., doomscrolling). Change one condition: move the phone, set app limits, change lighting.</li>
-          <li>Replace with a 5-minute grounding habit (stretching, breath, tidy). Journal before/after state.</li>
+          <li>Replace with a 5‑minute grounding habit (stretching, breath, tidy). Journal before/after state.</li>
         </ul>
       </section>
 
       <section class="day">
         <h3>Day 4: Context shifts identity</h3>
-        <ul class="list">
+        <ul>
           <li>Notice how your “self” shifts across contexts (home/work/alone). Jot 3 differences.</li>
           <li>Intentionally change one variable (music, workspace, posture) and observe mood/behavior changes. Journal which had most leverage.</li>
         </ul>
@@ -75,15 +185,15 @@
 
       <section class="day">
         <h3>Day 5: Values over narratives</h3>
-        <ul class="list">
+        <ul>
           <li>Write your top 3 values (e.g., honesty, learning, care).</li>
-          <li>For each decision, ask: “What’s the smallest action that expresses a value now?” Journal one case where this replaced rumination.</li>
+          <li>For decisions today, ask: “What’s the smallest action that expresses a value now?” Journal one case where this replaced rumination.</li>
         </ul>
       </section>
 
       <section class="day">
-        <h3>Day 6: Non-doership micro-practice</h3>
-        <ul class="list">
+        <h3>Day 6: Non‑doership micro‑practice</h3>
+        <ul>
           <li>For 5 minutes, let breath and sounds occur without management. Notice thoughts arise and pass without a central controller.</li>
           <li>In one conversation, relax control over wording; let speech “play through” while staying kind/clear. Journal clarity/ease.</li>
         </ul>
@@ -91,28 +201,25 @@
 
       <section class="day">
         <h3>Day 7: Integration and compassion</h3>
-        <ul class="list">
-          <li>10-minute open awareness: include breath, body, sounds, thoughts, and space simultaneously.</li>
+        <ul>
+          <li>10‑minute open awareness: include breath, body, sounds, thoughts, and space simultaneously.</li>
           <li>When encountering another’s reactivity, silently note “weather in awareness,” and respond with one supportive behavior.</li>
-          <li>Review the week’s highest-leverage condition changes and set one commitment for next week.</li>
+          <li>Review the week’s highest‑leverage condition changes and set one commitment for next week.</li>
         </ul>
       </section>
 
       <section class="day">
         <h3>Optional daily anchors</h3>
-        <ul class="list">
-          <li>Morning (3 min): “What’s present? What one small values-aligned action now?”</li>
+        <ul>
+          <li>Morning (3 min): “What’s present? What one small values‑aligned action now?”</li>
           <li>Evening (3 min): “Where did I identify with a story? What condition can I tweak tomorrow?”</li>
         </ul>
       </section>
     </div>
-  </main>
 
-  <footer>
-    <!-- Mirror your index footer if present -->
-  </footer>
-
-  <!-- Mirror any scripts your index uses -->
-  <!-- <script src="script.js"></script> -->
+    <div class="footer">
+      Proudly South African • Biltong AI
+    </div>
+  </div>
 </body>
 </html>
