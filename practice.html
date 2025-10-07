@@ -1,1 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Practice — Biltong AI Skeleton Companion</title>
+  <meta name="description" content="A human-sized customizable skeleton with Raspberry Pi, mic, and speaker, integrating ChatGPT API. Custom-built, evolving towards a full humanoid robot." />
+  <style>
+    :root{
+      --bg:#0a0a0a;
+      --card:#101011;
+      --muted:#b9bcc3;
+      --text:#f2f3f5;
+      --accent:#6cf0ff;
+      --accent2:#ff5c9a;
+      --border:#1b1c1f;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    header .brand{display:flex;gap:12px;align-items:center}
+    .logo{
+      width:36px;height:36px;border-radius:8px;
+      background: radial-gradient(120% 120% at 20% 20%, #1e1f24 0%, #0e0f12 50%, #030304 100%);
+      display:grid;place-items:center;
+      box-shadow: 0 0 0 1px var(--border), 0 10px 30px #000 inset;
+      position:relative;overflow:hidden;
+    }
+    .logo::after{
+      content:"";
+      position:absolute;inset:2px;border-radius:6px;
+      background: conic-gradient(from 180deg, #6cf0ff, #a78bfa, #ff5c9a, #6cf0ff);
+      mix-blend-mode:screen;opacity:0.25;
+      filter: blur(8px);
+    }
+    .brand h1{font-size:18px;margin:0;font-weight:600;letter-spacing:0.2px}
+    nav a{color:var(--muted);margin-left:14px}
+    nav a.active{color:var(--text)}
+    .hero{
+      display:grid;grid-template-columns:1.1fr 0.9fr;gap:24px;
+      align-items:stretch;margin:18px 0 28px;
+    }
+    .card{
+      background: linear-gradient(180deg, #0f1115, #0b0c10);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+    .title{font-size:24px;margin:0 0 6px}
+    .subtitle{margin:0 0 14px;color:var(--muted)}
+    .gallery{
+      display:flex;align-items:center;justify-content:center;
+      background: radial-gradient(80% 80% at 50% 10%, #12131a 0%, #0a0b0f 60%, #08090c 100%);
+      border-radius:12px;height:min(66vh,560px);position:relative;overflow:hidden;
+    }
+    .gallery img{
+      max-height:100%;
+      max-width:100%;
+      object-fit:contain;
+      filter: drop-shadow(0 12px 50px rgba(108,240,255,0.12));
+      image-rendering:auto;
+      transition: opacity 120ms ease-out;
+    }
+    .controls{
+      display:flex;gap:16px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap
+    }
+    .slider{
+      -webkit-appearance:none;appearance:none;width:100%;max-width:520px;height:4px;border-radius:999px;background:#20222a;outline:none
+    }
+    .slider::-webkit-slider-thumb{
+      -webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;
+      background:linear-gradient(180deg,#79f5ff,#2cc8d6);
+      box-shadow:0 0 0 4px rgba(108,240,255,0.15);
+      border:1px solid #3beaff;cursor:pointer
+    }
+    .slider::-moz-range-thumb{
+      width:18px;height:18px;border:none;border-radius:50%;
+      background:linear-gradient(180deg,#79f5ff,#2cc8d6);cursor:pointer
+    }
+    .pill{
+      border:1px solid var(--border);border-radius:999px;
+      padding:6px 10px;color:var(--muted);font-size:12px;letter-spacing:0.2px
+    }
+    .specs{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px
+    }
+    .spec{
+      background:linear-gradient(180deg,#0f1014,#0b0c10);
+      border:1px solid var(--border);border-radius:10px;padding:12px
+    }
+    .spec h4{margin:0 0 6px;font-size:14px}
+    .spec p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+    .cta{
+      display:flex;gap:12px;flex-wrap:wrap;margin-top:16px
+    }
+    .btn{
+      padding:10px 14px;border-radius:10px;border:1px solid var(--border);
+      background:#12131a;color:var(--text);text-decoration:none;font-weight:600
+    }
+    .btn.primary{
+      background:linear-gradient(180deg,#2cc8d6,#17829b);
+      border:1px solid #2fb6c5;color:#031418;
+      box-shadow:0 10px 30px rgba(47,182,197,0.25)
+    }
+    .prose p{color:var(--muted);line-height:1.6}
+    footer{
+      margin:32px 0 12px;color:#7c818a;font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px
+    }
+    @media (max-width: 980px){
+      .hero{grid-template-columns:1fr}
+      .gallery{height:min(56vh,460px)}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <h1>Biltong AI — Practice</h1>
+      </div>
+      <nav>
+        <a href="./index.html">Home</a>
+        <a class="active" href="./practice.html">Practice</a>
+      </nav>
+    </header>
 
+    <section class="hero">
+      <div class="card">
+        <h2 class="title">Human-Sized Skeleton Companion</h2>
+        <p class="subtitle">A custom-built, Raspberry Pi–powered display piece that’s evolving into a full humanoid robot.</p>
+        <div class="prose">
+          <p>
+            Meet your room’s most intriguing companion: a life-sized, anatomically correct skeleton with brains you can talk to. At its core sits a Raspberry Pi connected to a microphone and speaker, integrating with the ChatGPT API for natural, conversational interaction. It doesn’t move—yet—but the roadmap is clear: progressively add actuation, sensing, and behaviors on the way to a full-fledged humanoid robot.
+          </p>
+          <p>
+            Each build is made to order and hand-assembled. You can customize the outer skeleton’s finish and accents to match your style—clean lab-white, aged patina, neon cyberpunk, or something uniquely yours. Thanks to ChatGPT, your companion learns your preferences over time and becomes more helpful, more entertaining, and more “you.”
+          </p>
+        </div>
+
+        <div class="specs">
+          <div class="spec">
+            <h4>Core Compute</h4>
+            <p>Raspberry Pi at the heart, with configurable storage and network. Easy to update and extend.</p>
+          </div>
+          <div class="spec">
+            <h4>Voice I/O</h4>
+            <p>Integrated mic and speaker for hands-free conversation and responses.</p>
+          </div>
+          <div class="spec">
+            <h4>AI Integration</h4>
+            <p>ChatGPT API for natural dialogue. Remembers you and adapts over time.</p>
+          </div>
+          <div class="spec">
+            <h4>Custom Finish</h4>
+            <p>Choose your skeleton style: paint, lighting accents, wire routing, and more.</p>
+          </div>
+        </div>
+
+        <div class="cta">
+          <a class="btn primary" href="#order">Order Custom Build</a>
+          <a class="btn" href="#details">Technical Details</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="gallery" id="gallery">
+          <!-- Rotating Skeleton Viewer -->
+          <img id="skeletonImage" src="" alt="Rotating view of the Biltong AI skeleton" />
+        </div>
+        <div class="controls">
+          <span class="pill" id="frameLabel">Angle: 0°</span>
+          <input class="slider" id="rotateSlider" type="range" min="0" value="0" step="1" />
+          <span class="pill" id="frameCount">Frames: 0</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="details" class="card" style="margin-top:14px">
+      <h3 style="margin:0 0 10px">Details and Roadmap</h3>
+      <div class="prose">
+        <p>
+          Today: a striking, intelligent showpiece that can chat, play audio, answer questions, and host custom prompts or routines. Tomorrow: motorized joints, onboard sensors, posture and gesture control, and a safety-first control stack. The design is intentionally modular—add servos, drivers, and feedback loops as your build evolves.
+        </p>
+        <p>
+          For developers and tinkerers, it’s a friendly platform: GPIO for sensors and lights, USB for peripherals, and a straightforward software stack connecting to the ChatGPT API. Fork the repo, contribute modules, and shape the path to a fully embodied assistant.
+        </p>
+      </div>
+    </section>
+
+    <section id="order" class="card" style="margin-top:14px">
+      <h3 style="margin:0 0 10px">Ordering and Customization</h3>
+      <div class="prose">
+        <p>
+          Each unit is built to order. Lead times vary depending on component availability and customization complexity. We’ll finalize the finish, lighting accents, and internal wiring style with you before assembly.
+        </p>
+        <p>
+          Ready to start? Reach out with your ideas, and we’ll scope your custom build.
+        </p>
+      </div>
+      <div class="cta">
+        <a class="btn primary" href="mailto:support@abacus.ai?subject=Biltong%20AI%20Skeleton%20Custom%20Build">Start Your Build</a>
+        <a class="btn" href="./index.html">Back to Home</a>
+      </div>
+    </section>
+
+    <footer>
+      <span>© Biltong AI</span>
+      <span>Theme: black studio backdrop • WIP humanoid robot</span>
+    </footer>
+  </div>
+
+  <script>
+    // Replace these URLs with your actual skeleton image frames (black background, consistent lighting).
+    // Order them clockwise around the subject for smooth rotation.
+    // Start with 4–8 images; scale to 24–36 for smoothness.
+    const skeletonFrames = [
+      // Example placeholders — replace with your hosted image URLs
+      // e.g. from your GitHub assets or your image CDN.
+      "https://cdn.abacus.ai/images/e0413b9b-72b7-4358-b285-684c81119760.png", // front-left 3/4
+      "https://cdn.abacus.ai/images/f52e52a7-10eb-4b8e-8707-2687155594ba.png", // front
+      "https://cdn.abacus.ai/images/9d190d8f-908d-428a-a861-88c4f56807ae.png", // front-right 3/4
+      "https://cdn.abacus.ai/images/fbac2de3-579f-48a8-a71d-d8324fd5a741.png"  // side/right
+      // Add more around-the-back frames as you generate them for true 360°
+    ];
+
+    const img = document.getElementById('skeletonImage');
+    const slider = document.getElementById('rotateSlider');
+    const frameLabel = document.getElementById('frameLabel');
+    const frameCount = document.getElementById('frameCount');
+
+    // Preload images for instant switching
+    const preload = (urls) => urls.map(u => { const i = new Image(); i.src = u; return i; });
+
+    function updateFrame(idx){
+      if (!skeletonFrames.length) return;
+      const clamped = ((idx % skeletonFrames.length) + skeletonFrames.length) % skeletonFrames.length;
+      img.style.opacity = 0.6;
+      const nextSrc = skeletonFrames[clamped];
+      if (img.src !== nextSrc){
+        img.src = nextSrc;
+      }
+      // Angle approximation for label (0° .. 360°)
+      const angle = Math.round((clamped / skeletonFrames.length) * 360);
+      frameLabel.textContent = "Angle: " + angle + "°";
+      setTimeout(()=> img.style.opacity = 1, 60);
+    }
+
+    function init(){
+      frameCount.textContent = "Frames: " + skeletonFrames.length;
+      slider.max = Math.max(skeletonFrames.length - 1, 0);
+      slider.value = 0;
+      preload(skeletonFrames);
+      updateFrame(0);
+
+      // Drag to rotate
+      slider.addEventListener('input', (e)=> updateFrame(parseInt(e.target.value)));
+
+      // Optional: click-and-drag rotation directly on the gallery
+      let dragging = false;
+      let lastX = 0;
+      const gallery = document.getElementById('gallery');
+      let currentIndex = 0;
+
+      const toIndex = () => parseInt(slider.value) || 0;
+      const setIndex = (i) => { slider.value = i; updateFrame(i); }
+
+      gallery.addEventListener('pointerdown', (e)=>{
+        dragging = true; lastX = e.clientX; currentIndex = toIndex();
+        gallery.setPointerCapture(e.pointerId);
+      });
+      gallery.addEventListener('pointermove', (e)=>{
+        if(!dragging) return;
+        const dx = e.clientX - lastX;
+        // Sensitivity: one frame per ~12px dragged
+        const step = Math.round(dx / 12);
+        if (step !== 0){
+          let next = currentIndex + step;
+          next = ((next % skeletonFrames.length) + skeletonFrames.length) % skeletonFrames.length;
+          setIndex(next);
+        }
+      });
+      const end = (e)=>{ dragging = false; if(e.pointerId) try{ gallery.releasePointerCapture(e.pointerId);}catch{} }
+      gallery.addEventListener('pointerup', end);
+      gallery.addEventListener('pointercancel', end);
+      gallery.addEventListener('pointerleave', end);
+
+      // Keyboard left/right to rotate
+      window.addEventListener('keydown', (e)=>{
+        if (!['ArrowLeft','ArrowRight'].includes(e.key) || !skeletonFrames.length) return;
+        e.preventDefault();
+        const dir = e.key === 'ArrowRight' ? 1 : -1;
+        const i = toIndex();
+        setIndex(((i + dir) % skeletonFrames.length + skeletonFrames.length) % skeletonFrames.length);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
