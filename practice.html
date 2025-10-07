@@ -33,8 +33,7 @@
       content:"";
       position:absolute;inset:2px;border-radius:6px;
       background: conic-gradient(from 180deg, #6cf0ff, #a78bfa, #ff5c9a, #6cf0ff);
-      mix-blend-mode:screen;opacity:0.25;
-      filter: blur(8px);
+      mix-blend-mode:screen;opacity:0.25;filter: blur(8px);
     }
     .brand h1{font-size:18px;margin:0;font-weight:600;letter-spacing:0.2px}
     nav a{color:var(--muted);margin-left:14px}
@@ -58,12 +57,9 @@
       border-radius:12px;height:min(66vh,560px);position:relative;overflow:hidden;
     }
     .gallery img{
-      max-height:100%;
-      max-width:100%;
-      object-fit:contain;
+      max-height:100%;max-width:100%;object-fit:contain;
       filter: drop-shadow(0 12px 50px rgba(108,240,255,0.12));
-      image-rendering:auto;
-      transition: opacity 120ms ease-out;
+      image-rendering:auto;transition: opacity 120ms ease-out;
     }
     .controls{
       display:flex;gap:16px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap
@@ -88,28 +84,14 @@
     .specs{
       display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px
     }
-    .spec{
-      background:linear-gradient(180deg,#0f1014,#0b0c10);
-      border:1px solid var(--border);border-radius:10px;padding:12px
-    }
+    .spec{background:linear-gradient(180deg,#0f1014,#0b0c10);border:1px solid var(--border);border-radius:10px;padding:12px}
     .spec h4{margin:0 0 6px;font-size:14px}
     .spec p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
-    .cta{
-      display:flex;gap:12px;flex-wrap:wrap;margin-top:16px
-    }
-    .btn{
-      padding:10px 14px;border-radius:10px;border:1px solid var(--border);
-      background:#12131a;color:var(--text);text-decoration:none;font-weight:600
-    }
-    .btn.primary{
-      background:linear-gradient(180deg,#2cc8d6,#17829b);
-      border:1px solid #2fb6c5;color:#031418;
-      box-shadow:0 10px 30px rgba(47,182,197,0.25)
-    }
+    .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .btn{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:#12131a;color:var(--text);text-decoration:none;font-weight:600}
+    .btn.primary{background:linear-gradient(180deg,#2cc8d6,#17829b);border:1px solid #2fb6c5;color:#031418;box-shadow:0 10px 30px rgba(47,182,197,0.25)}
     .prose p{color:var(--muted);line-height:1.6}
-    footer{
-      margin:32px 0 12px;color:#7c818a;font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px
-    }
+    footer{margin:32px 0 12px;color:#7c818a;font-size:13px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
     @media (max-width: 980px){
       .hero{grid-template-columns:1fr}
       .gallery{height:min(56vh,460px)}
@@ -132,13 +114,13 @@
     <section class="hero">
       <div class="card">
         <h2 class="title">Human-Sized Humanoid Companion</h2>
-        <p class="subtitle">We build custom-built, Raspberry Pi–powered display piece that’s evolving into a full humanoid robot.</p>
+        <p class="subtitle">We build custom, Raspberry Pi–powered companions on the path to a full humanoid robot.</p>
         <div class="prose">
           <p>
-            Meet your room’s most intriguing companion: a life-sized, anatomically correct skeleton with brains you can talk to. At its core sits a Raspberry Pi connected to a microphone and speaker, integrating with the ChatGPT API for natural, conversational interaction. It doesn’t move—yet—but the roadmap is clear: progressively add actuation, sensing, and behaviors on the way to a full-fledged humanoid robot.
+            Meet your room’s most intriguing companion: a life-sized skeleton with brains you can talk to. At its core sits a Raspberry Pi connected to a microphone and speaker, integrating with the ChatGPT API for natural, conversational interaction. It doesn’t move—yet—but the roadmap is clear: progressively add actuation, sensing, and behaviors on the way to a full-fledged humanoid robot.
           </p>
           <p>
-            Built to order and hand-assembled, the bones remain authentic — the personality is all you. Customization happens on the outside: dress it in normal clothes, choose face styles (male, female, or neutral), and add accessories like a Viking helmet, masks, or lighting accents. With ChatGPT or Local LLM support, your companion gets to know you over time, becoming more helpful, more entertaining, and more “you.”
+            Built to order and hand-assembled, the bones remain authentic — the personality is all you. Customization happens on the outside: dress it in normal clothes, choose face styles (male, female, or neutral), and add accessories like a Viking helmet, masks, or lighting accents. With ChatGPT or local LLM support, your companion gets to know you over time, becoming more helpful, more entertaining, and more “you.”
           </p>
         </div>
 
@@ -168,15 +150,27 @@
       </div>
 
       <div class="card">
-        <div class="gallery" id="gallery">
-          <!-- Rotating Skeleton Viewer -->
-          <img id="skeletonImage" src="" alt="Rotating view of the Biltong AI skeleton" />
+        <div class="gallery" id="gallery1">
+          <img id="skeletonImage1" src="" alt="Rotating view of the Biltong AI skeleton (set 1)" />
         </div>
         <div class="controls">
-          <span class="pill" id="frameLabel">Angle: 0°</span>
-          <input class="slider" id="rotateSlider" type="range" min="0" value="0" step="1" />
-          <span class="pill" id="frameCount">Frames: 0</span>
+          <span class="pill" id="frameLabel1">Angle: 0°</span>
+          <input class="slider" id="rotateSlider1" type="range" min="0" value="0" step="1" />
+          <span class="pill" id="frameCount1">Frames: 0</span>
         </div>
+      </div>
+    </section>
+
+    <!-- New second gallery section -->
+    <section class="card" style="margin-top:14px">
+      <h3 style="margin:0 0 10px">Alt Design Gallery</h3>
+      <div class="gallery" id="gallery2">
+        <img id="skeletonImage2" src="" alt="Rotating view of the Biltong AI skeleton (set 2)" />
+      </div>
+      <div class="controls">
+        <span class="pill" id="frameLabel2">Angle: 0°</span>
+        <input class="slider" id="rotateSlider2" type="range" min="0" value="0" step="1" />
+        <span class="pill" id="frameCount2">Frames: 0</span>
       </div>
     </section>
 
@@ -215,83 +209,98 @@
   </div>
 
   <script>
-    // Use relative filenames because your images are in the same folder as this HTML on GitHub Pages.
-    // Start with duplicates if you only have one angle; replace with real multi-angle filenames later.
-    const skeletonFrames = [
-      "temp_image_d3d4d82a-3f6f-4952-aba7-818a3dd2285d.png.jpg", // front
-      "temp_image_58fbe65c-438f-487b-8900-bb0a6eb91733.png.jpg", // another angle (ensure this file exists)
-      "temp_image_eafdb2ad-5d1a-403a-b233-a76492817d0b.png.jpg", // another angle (ensure this file exists)
-      "temp_image_d3d4d82a-3f6f-4952-aba7-818a3dd2285d.png.jpg"  // reuse front until you add more frames
+    // ========== GALLERY 1 ==========
+    const skeletonFrames1 = [
+      "temp_image_d3d4d82a-3f6f-4952-aba7-818a3dd2285d.png.jpg",
+      "temp_image_58fbe65c-438f-487b-8900-bb0a6eb91733.png.jpg",
+      "temp_image_eafdb2ad-5d1a-403a-b233-a76492817d0b.png.jpg",
+      "temp_image_d3d4d82a-3f6f-4952-aba7-818a3dd2285d.png.jpg"
     ];
 
-    const img = document.getElementById('skeletonImage');
-    const slider = document.getElementById('rotateSlider');
-    const frameLabel = document.getElementById('frameLabel');
-    const frameCount = document.getElementById('frameCount');
-
-    function preload(urls){
-      urls.forEach(u => { const i = new Image(); i.src = u; });
-    }
-
-    function updateFrame(idx){
-      if (!skeletonFrames.length) return;
-      const clamped = ((idx % skeletonFrames.length) + skeletonFrames.length) % skeletonFrames.length;
-      img.style.opacity = 0.6;
-      const nextSrc = skeletonFrames[clamped];
-      if (img.getAttribute('src') !== nextSrc){
-        img.setAttribute('src', nextSrc);
+    function setupGallery({
+      frames, imgEl, sliderEl, labelEl, countEl, galleryEl
+    }){
+      function preload(urls){ urls.forEach(u => { const i = new Image(); i.src = u; }); }
+      function updateFrame(idx){
+        if (!frames.length) return;
+        const clamped = ((idx % frames.length) + frames.length) % frames.length;
+        imgEl.style.opacity = 0.6;
+        const nextSrc = frames[clamped];
+        if (imgEl.getAttribute('src') !== nextSrc){
+          imgEl.setAttribute('src', nextSrc);
+        }
+        const angle = Math.round((clamped / frames.length) * 360);
+        labelEl.textContent = "Angle: " + angle + "°";
+        setTimeout(()=> imgEl.style.opacity = 1, 60);
       }
-      const angle = Math.round((clamped / skeletonFrames.length) * 360);
-      frameLabel.textContent = "Angle: " + angle + "°";
-      setTimeout(()=> img.style.opacity = 1, 60);
-    }
+      function toIndex(){ return parseInt(sliderEl.value) || 0; }
+      function setIndex(i){ sliderEl.value = i; updateFrame(i); }
 
-    function init(){
-      frameCount.textContent = "Frames: " + skeletonFrames.length;
-      slider.max = Math.max(skeletonFrames.length - 1, 0);
-      slider.value = 0;
-      preload(skeletonFrames);
+      countEl.textContent = "Frames: " + frames.length;
+      sliderEl.max = Math.max(frames.length - 1, 0);
+      sliderEl.value = 0;
+      preload(frames);
       updateFrame(0);
 
-      slider.addEventListener('input', (e)=> updateFrame(parseInt(e.target.value)));
+      sliderEl.addEventListener('input', (e)=> updateFrame(parseInt(e.target.value)));
 
-      let dragging = false;
-      let lastX = 0;
-      const gallery = document.getElementById('gallery');
-
-      const toIndex = () => parseInt(slider.value) || 0;
-      const setIndex = (i) => { slider.value = i; updateFrame(i); }
-
-      gallery.addEventListener('pointerdown', (e)=>{
-        dragging = true; lastX = e.clientX;
-        gallery.setPointerCapture(e.pointerId);
+      let dragging = false; let lastX = 0;
+      galleryEl.addEventListener('pointerdown', (e)=>{
+        dragging = true; lastX = e.clientX; galleryEl.setPointerCapture(e.pointerId);
       });
-      gallery.addEventListener('pointermove', (e)=>{
+      galleryEl.addEventListener('pointermove', (e)=>{
         if(!dragging) return;
         const dx = e.clientX - lastX;
         const step = Math.round(dx / 12);
         if (step !== 0){
           let next = toIndex() + step;
-          next = ((next % skeletonFrames.length) + skeletonFrames.length) % skeletonFrames.length;
+          next = ((next % frames.length) + frames.length) % frames.length;
           setIndex(next);
           lastX = e.clientX;
         }
       });
-      const end = (e)=>{ dragging = false; try{ gallery.releasePointerCapture(e.pointerId);}catch{} }
-      gallery.addEventListener('pointerup', end);
-      gallery.addEventListener('pointercancel', end);
-      gallery.addEventListener('pointerleave', end);
+      const end = (e)=>{ dragging = false; try{ galleryEl.releasePointerCapture(e.pointerId);}catch{} }
+      galleryEl.addEventListener('pointerup', end);
+      galleryEl.addEventListener('pointercancel', end);
+      galleryEl.addEventListener('pointerleave', end);
 
       window.addEventListener('keydown', (e)=>{
-        if (!['ArrowLeft','ArrowRight'].includes(e.key) || !skeletonFrames.length) return;
+        if (!['ArrowLeft','ArrowRight'].includes(e.key) || !frames.length) return;
+        // Only rotate the gallery in view/focused if user hovers it
+        if (document.activeElement !== sliderEl && !galleryEl.matches(':hover')) return;
         e.preventDefault();
         const dir = e.key === 'ArrowRight' ? 1 : -1;
         const i = toIndex();
-        setIndex(((i + dir) % skeletonFrames.length + skeletonFrames.length) % skeletonFrames.length);
+        setIndex(((i + dir) % frames.length + frames.length) % frames.length);
       });
     }
 
-    document.addEventListener('DOMContentLoaded', init);
+    setupGallery({
+      frames: skeletonFrames1,
+      imgEl: document.getElementById('skeletonImage1'),
+      sliderEl: document.getElementById('rotateSlider1'),
+      labelEl: document.getElementById('frameLabel1'),
+      countEl: document.getElementById('frameCount1'),
+      galleryEl: document.getElementById('gallery1')
+    });
+
+    // ========== GALLERY 2 (NEW) ==========
+    // Replace these with your second set of images (same folder). Add/remove entries as needed.
+    const skeletonFrames2 = [
+      "placeholder_alt_01.jpg",
+      "placeholder_alt_02.jpg",
+      "placeholder_alt_03.jpg",
+      "placeholder_alt_04.jpg"
+    ];
+
+    setupGallery({
+      frames: skeletonFrames2,
+      imgEl: document.getElementById('skeletonImage2'),
+      sliderEl: document.getElementById('rotateSlider2'),
+      labelEl: document.getElementById('frameLabel2'),
+      countEl: document.getElementById('frameCount2'),
+      galleryEl: document.getElementById('gallery2')
+    });
   </script>
 </body>
 </html>
