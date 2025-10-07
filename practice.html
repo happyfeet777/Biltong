@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Practice — Biltong AI Skeleton Companion</title>
-  <meta name="description" content="A human-sized customizable skeleton with Raspberry Pi, mic, and speaker, integrating ChatGPT API. Custom-built, evolving towards a full humanoid robot." />
+  <meta name="description" content="A human-sized, custom-dressed skeleton companion with Raspberry Pi, mic, and speaker, integrating ChatGPT API. Custom-built, evolving towards a full humanoid robot." />
   <style>
     :root{
       --bg:#0a0a0a;
@@ -138,7 +138,7 @@
             Meet your room’s most intriguing companion: a life-sized, anatomically correct skeleton with brains you can talk to. At its core sits a Raspberry Pi connected to a microphone and speaker, integrating with the ChatGPT API for natural, conversational interaction. It doesn’t move—yet—but the roadmap is clear: progressively add actuation, sensing, and behaviors on the way to a full-fledged humanoid robot.
           </p>
           <p>
-            Each build is made to order and hand-assembled. You can customize the outer skeleton’s finish and accents to match your style—clean lab-white, aged patina, neon cyberpunk, or something uniquely yours. Thanks to ChatGPT, your companion learns your preferences over time and becomes more helpful, more entertaining, and more “you.”
+            Built to order and hand-assembled, the bones remain authentic — the personality is all you. Customization happens on the outside: dress it in normal clothes, choose face styles (male, female, or neutral), and add accessories like a Viking helmet, masks, or lighting accents. With ChatGPT, your companion gets to know you over time, becoming more helpful, more entertaining, and more “you.”
           </p>
         </div>
 
@@ -153,11 +153,11 @@
           </div>
           <div class="spec">
             <h4>AI Integration</h4>
-            <p>ChatGPT API for natural dialogue. Remembers you and adapts over time.</p>
+            <p>ChatGPT API for natural dialogue. Learns your preferences over time.</p>
           </div>
           <div class="spec">
-            <h4>Custom Finish</h4>
-            <p>Choose your skeleton style: paint, lighting accents, wire routing, and more.</p>
+            <h4>Exterior Style</h4>
+            <p>Clothing, faceplates, helmets, masks, and lighting — your call.</p>
           </div>
         </div>
 
@@ -196,7 +196,7 @@
       <h3 style="margin:0 0 10px">Ordering and Customization</h3>
       <div class="prose">
         <p>
-          Each unit is built to order. Lead times vary depending on component availability and customization complexity. We’ll finalize the finish, lighting accents, and internal wiring style with you before assembly.
+          Each unit is built to order. Lead times vary depending on component availability and customization complexity. We’ll finalize clothing, face style, and accessories (helmets, masks, lighting) with you before assembly.
         </p>
         <p>
           Ready to start? Reach out with your ideas, and we’ll scope your custom build.
@@ -215,18 +215,13 @@
   </div>
 
   <script>
-    // Replace these URLs with your actual skeleton image frames (black background, consistent lighting).
-    // Order them clockwise around the subject for smooth rotation.
-    // Start with 4–8 images; scale to 24–36 for smoothness.
+    // Use relative filenames because your images are in the same folder as this HTML on GitHub Pages.
+    // Start with duplicates if you only have one angle; replace with real multi-angle filenames later.
     const skeletonFrames = [
-      // Example placeholders — replace with your hosted image URLs
-      // e.g. from your GitHub assets or your image CDN.
-      "temp_image_58fbe65c-438f-487b-8900-bb0a6eb91733.png.jpg", // front-left 3/4
       "temp_image_d3d4d82a-3f6f-4952-aba7-818a3dd2285d.png.jpg", // front
-      "https://cdn.abacus.ai/images/9d190d8f-908d-428a-a861-88c4f56807ae.png", // front-right 3/4
-      "temp_image_eafdb2ad-5d1a-403a-b233-a76492817d0b.png.jpg"  // side/right
-      "temp_image_d3d4d82a-3f6f-4952-aba7-818a3dd2285d.png.jpg" // back
-      // Add more around-the-back frames as you generate them for true 360°
+      "temp_image_58fbe65c-438f-487b-8900-bb0a6eb91733.png.jpg", // another angle (ensure this file exists)
+      "temp_image_eafdb2ad-5d1a-403a-b233-a76492817d0b.png.jpg", // another angle (ensure this file exists)
+      "temp_image_d3d4d82a-3f6f-4952-aba7-818a3dd2285d.png.jpg"  // reuse front until you add more frames
     ];
 
     const img = document.getElementById('skeletonImage');
@@ -234,18 +229,18 @@
     const frameLabel = document.getElementById('frameLabel');
     const frameCount = document.getElementById('frameCount');
 
-    // Preload images for instant switching
-    const preload = (urls) => urls.map(u => { const i = new Image(); i.src = u; return i; });
+    function preload(urls){
+      urls.forEach(u => { const i = new Image(); i.src = u; });
+    }
 
     function updateFrame(idx){
       if (!skeletonFrames.length) return;
       const clamped = ((idx % skeletonFrames.length) + skeletonFrames.length) % skeletonFrames.length;
       img.style.opacity = 0.6;
       const nextSrc = skeletonFrames[clamped];
-      if (img.src !== nextSrc){
-        img.src = nextSrc;
+      if (img.getAttribute('src') !== nextSrc){
+        img.setAttribute('src', nextSrc);
       }
-      // Angle approximation for label (0° .. 360°)
       const angle = Math.round((clamped / skeletonFrames.length) * 360);
       frameLabel.textContent = "Angle: " + angle + "°";
       setTimeout(()=> img.style.opacity = 1, 60);
@@ -258,39 +253,35 @@
       preload(skeletonFrames);
       updateFrame(0);
 
-      // Drag to rotate
       slider.addEventListener('input', (e)=> updateFrame(parseInt(e.target.value)));
 
-      // Optional: click-and-drag rotation directly on the gallery
       let dragging = false;
       let lastX = 0;
       const gallery = document.getElementById('gallery');
-      let currentIndex = 0;
 
       const toIndex = () => parseInt(slider.value) || 0;
       const setIndex = (i) => { slider.value = i; updateFrame(i); }
 
       gallery.addEventListener('pointerdown', (e)=>{
-        dragging = true; lastX = e.clientX; currentIndex = toIndex();
+        dragging = true; lastX = e.clientX;
         gallery.setPointerCapture(e.pointerId);
       });
       gallery.addEventListener('pointermove', (e)=>{
         if(!dragging) return;
         const dx = e.clientX - lastX;
-        // Sensitivity: one frame per ~12px dragged
         const step = Math.round(dx / 12);
         if (step !== 0){
-          let next = currentIndex + step;
+          let next = toIndex() + step;
           next = ((next % skeletonFrames.length) + skeletonFrames.length) % skeletonFrames.length;
           setIndex(next);
+          lastX = e.clientX;
         }
       });
-      const end = (e)=>{ dragging = false; if(e.pointerId) try{ gallery.releasePointerCapture(e.pointerId);}catch{} }
+      const end = (e)=>{ dragging = false; try{ gallery.releasePointerCapture(e.pointerId);}catch{} }
       gallery.addEventListener('pointerup', end);
       gallery.addEventListener('pointercancel', end);
       gallery.addEventListener('pointerleave', end);
 
-      // Keyboard left/right to rotate
       window.addEventListener('keydown', (e)=>{
         if (!['ArrowLeft','ArrowRight'].includes(e.key) || !skeletonFrames.length) return;
         e.preventDefault();
