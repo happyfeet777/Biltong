@@ -8,7 +8,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #000000; /* Matching the black background from the image */
+            background-color: #000000;
             font-family: 'Arial', sans-serif;
             color: #ffffff;
             display: flex;
@@ -20,7 +20,6 @@
             position: relative;
         }
 
-        /* Subtle South African flag-inspired gradient overlay for modern flair */
         body::before {
             content: '';
             position: absolute;
@@ -42,8 +41,9 @@
         .logo {
             max-width: 400px;
             height: auto;
-            filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.5)); /* Orange glow for a modern, techy South African vibe */
+            filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.5));
             transition: transform 0.3s ease;
+            cursor: pointer; /* Indicates clickable */
         }
 
         .logo:hover {
@@ -53,22 +53,21 @@
         .proud-text {
             font-size: 1.2em;
             margin-top: 10px;
-            color: #ffd700; /* Gold for a premium, South African feel */
+            color: #ffd700;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
         }
 
-        /* Fancy LLM-style chat box */
         .chat-box {
             width: 80%;
             max-width: 600px;
-            background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent for modern depth */
-            border: 2px solid #ffd700; /* Gold border tying into SA theme */
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ffd700;
             border-radius: 20px;
             padding: 15px;
-            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3); /* Subtle glow */
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
             transition: all 0.3s ease;
             position: relative;
-            backdrop-filter: blur(10px); /* Modern glassmorphism effect */
+            backdrop-filter: blur(10px);
             display: flex;
             flex-direction: column;
         }
@@ -83,6 +82,7 @@
             margin-bottom: 10px;
             padding: 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 300px;
         }
 
         .chat-message {
@@ -98,7 +98,7 @@
         }
 
         .ai-message {
-            background-color: rgba(0, 122, 51, 0.3); /* Green for AI responses, tying into SA flag */
+            background-color: rgba(0, 122, 51, 0.3);
             align-self: flex-start;
         }
 
@@ -112,22 +112,21 @@
             outline: none;
             resize: none;
             overflow: auto;
-            text-align: center; /* Centers the text horizontally */
-            padding-top: 15px; /* Shifts it down one line for better vertical positioning */
+            text-align: center;
+            padding-top: 15px;
             box-sizing: border-box;
         }
 
         .chat-input::placeholder {
-            color: rgba(255, 255, 255, 0.5); /* Subtle placeholder text */
+            color: rgba(255, 255, 255, 0.5);
             font-style: italic;
-            text-align: center; /* Centers the placeholder too */
+            text-align: center;
         }
 
         .chat-input:focus::placeholder {
-            color: transparent; /* Disappears on click/focus */
+            color: transparent;
         }
 
-        /* Footer styling */
         .footer {
             position: absolute;
             bottom: 20px;
@@ -135,13 +134,11 @@
             text-align: center;
         }
 
-        /* Animation for fade-in */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Media query for responsiveness */
         @media (max-width: 768px) {
             .logo {
                 max-width: 300px;
@@ -151,7 +148,6 @@
             }
         }
 
-        /* Optional: make the anchor around the logo look clean */
         .logo-link {
             display: inline-block;
         }
@@ -159,11 +155,13 @@
 </head>
 <body>
     <div class="logo-container">
-        <!-- Wrap the logo in a link to practice.html -->
-        <a href="practice.html" title="Open 7‑Day Practice Plan" class="logo-link">
+        <!-- Login Trigger on Click -->
+        <a href="#" id="login-trigger" class="logo-link" title="Click to Login">
             <img src="biltong.jpg" alt="Biltong AI Logo" class="logo">
         </a>
+        <p style="font-size: 0.8em; color: #888; margin-top: 5px;">(Click logo to login)</p>
     </div>
+    
     <div class="chat-box">
         <div class="chat-history" id="chat-history"></div>
         <textarea class="chat-input" id="chat-input" placeholder="Chat wif Biltong.ai"></textarea>
@@ -172,10 +170,59 @@
         <p class="proud-text"></p>
     </div>
 
+    <!-- FIREBASE CONFIGURATION & LOGIC -->
+    <script type="module">
+        // We use the CDN links because GitHub Pages doesn't run 'npm install'
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Your specific configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAo5AUfNXysVLWZJxm7qElTH8Iy9j_QeZk",
+            authDomain: "biltong-ai-firebase-login.firebaseapp.com",
+            projectId: "biltong-ai-firebase-login",
+            storageBucket: "biltong-ai-firebase-login.firebasestorage.app",
+            messagingSenderId: "517789318910",
+            appId: "1:517789318910:web:a7778987e16b3d0044efaf",
+            measurementId: "G-XDQ8211KL6"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Handle Logo Click
+        const loginTrigger = document.getElementById('login-trigger');
+        
+        loginTrigger.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            
+            console.log("Attempting login...");
+            
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    console.log("User logged in:", user.displayName);
+                    alert("Lekker! Welcome " + user.displayName);
+                    
+                    // Redirect to the practice page after successful login
+                    window.location.href = "practice.html";
+                })
+                .catch((error) => {
+                    console.error("Login Error:", error.code, error.message);
+                    alert("Eish! Login failed. Check console for details.");
+                });
+        });
+    </script>
+
+    <!-- CHAT LOGIC (Existing) -->
     <script>
         const chatInput = document.getElementById('chat-input');
         const chatHistory = document.getElementById('chat-history');
-        const apiKey = 'YOUR_GEMINI_API_KEY_HERE'; // Replace with your actual Gemini API key
+        const apiKey = 'YOUR_GEMINI_API_KEY_HERE'; // Remember to put your Gemini Key back here!
         const geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + apiKey;
 
         chatInput.addEventListener('keydown', async (event) => {
@@ -183,11 +230,9 @@
                 event.preventDefault();
                 const message = chatInput.value.trim();
                 if (message) {
-                    // Add user message to history
                     addMessageToHistory(message, 'user');
                     chatInput.value = '';
 
-                    // Call Gemini API
                     try {
                         const response = await fetch(geminiApiUrl, {
                             method: 'POST',
@@ -222,7 +267,6 @@
             chatHistory.scrollTop = chatHistory.scrollHeight;
         }
 
-        // Handle placeholder (existing code)
         chatInput.addEventListener('focus', () => {
             chatInput.placeholder = '';
         });
