@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Biltong AI - Book</title>
     <style>
+        :root{
+            --gold: #ffd700;
+            --shadow: rgba(255, 165, 0, 0.25);
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -12,47 +17,57 @@
             font-family: 'Arial', sans-serif;
             color: #ffffff;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+
+            /* Allow scrolling (FIX) */
+            overflow-x: hidden;
+            overflow-y: auto;
+
             position: relative;
         }
 
         body::before {
             content: '';
-            position: absolute;
+            position: fixed; /* keeps gradient fixed while scrolling */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(222, 41, 16, 0.1), rgba(0, 122, 51, 0.1), rgba(0, 35, 102, 0.1), rgba(252, 209, 22, 0.1));
+            background: linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.8),
+                rgba(222, 41, 16, 0.1),
+                rgba(0, 122, 51, 0.1),
+                rgba(0, 35, 102, 0.1),
+                rgba(252, 209, 22, 0.1)
+            );
             opacity: 0.3;
             z-index: -1;
+            pointer-events: none;
         }
 
+        /* Top nav */
         .top-nav {
-            position: absolute;
-            top: 18px;
-            left: 0;
-            width: 100%;
+            position: sticky; /* stays at top but scrolls naturally with the page */
+            top: 0;
+            padding: 18px 0 10px;
             display: flex;
             justify-content: center;
-            z-index: 5;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.75), rgba(0,0,0,0));
+            backdrop-filter: blur(6px);
         }
 
         .nav-btn {
             display: inline-block;
             padding: 10px 18px;
             border-radius: 999px;
-            border: 2px solid #ffd700;
+            border: 2px solid var(--gold);
             color: #ffffff;
             text-decoration: none;
             font-weight: 700;
             letter-spacing: 0.5px;
             background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.25);
+            box-shadow: 0 4px 15px var(--shadow);
             backdrop-filter: blur(10px);
             transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
@@ -63,13 +78,24 @@
             background: rgba(255, 255, 255, 0.12);
         }
 
+        /* Page layout */
+        .page {
+            width: min(980px, 92vw);
+            margin: 0 auto;
+            padding: 40px 0 70px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+        }
+
         .card {
-            width: min(900px, 92vw);
+            width: 100%;
             background: rgba(255, 255, 255, 0.08);
-            border: 2px solid #ffd700;
+            border: 2px solid var(--gold);
             border-radius: 20px;
             padding: 18px;
-            box-shadow: 0 6px 20px rgba(255, 165, 0, 0.25);
+            box-shadow: 0 6px 20px var(--shadow);
             backdrop-filter: blur(10px);
             text-align: center;
         }
@@ -77,8 +103,21 @@
         .card h1 {
             margin: 0 0 14px 0;
             font-size: 1.6rem;
-            color: #ffd700;
+            color: var(--gold);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Fade-in / graceful reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(14px) scale(0.99);
+            transition: opacity 900ms ease, transform 900ms ease;
+            will-change: opacity, transform;
+        }
+
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
 
         .book-img {
@@ -87,6 +126,28 @@
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.18);
             box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            display: block;
+        }
+
+        /* Optional helper text */
+        .hint {
+            margin: 0;
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.75);
+        }
+
+        /* Give the page some extra height so scrolling is obvious */
+        .spacer {
+            height: 40vh;
+            width: 100%;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                transition: none;
+                opacity: 1;
+                transform: none;
+            }
         }
     </style>
 </head>
@@ -95,9 +156,35 @@
         <a class="nav-btn" href="index.html">Home</a>
     </nav>
 
-    <main class="card">
-        <h1>Book</h1>
-        <img class="book-img" src="Book.jpeg" alt="Book" />
-    </main>
+    <div class="page">
+        <div class="card">
+            <h1>Book</h1>
+            <p class="hint">Scroll down — the book will appear smoothly.</p>
+        </div>
+
+        <div class="spacer" aria-hidden="true"></div>
+
+        <main class="card reveal" id="book-card">
+            <img class="book-img" src="Book.jpeg" alt="Book" loading="lazy" />
+        </main>
+
+        <div class="spacer" aria-hidden="true"></div>
+    </div>
+
+    <script>
+        // Reveal the image card gracefully when it scrolls into view
+        const target = document.getElementById('book-card');
+
+        const observer = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            }
+        }, { threshold: 0.15 });
+
+        observer.observe(target);
+    </script>
 </body>
 </html>
