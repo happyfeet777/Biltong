@@ -32,6 +32,45 @@
             z-index: -1;
         }
 
+        /* Top nav (NEW) */
+        .top-nav {
+            position: absolute;
+            top: 18px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 5;
+            pointer-events: none; /* lets clicks through except on the button */
+        }
+
+        /* Nav button (NEW) */
+        .nav-btn {
+            pointer-events: auto;
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 2px solid #ffd700;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.25);
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(255, 165, 0, 0.45);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0px);
+        }
+
         .logo-container {
             text-align: center;
             margin-bottom: 40px;
@@ -154,6 +193,11 @@
     </style>
 </head>
 <body>
+    <!-- Top "Book" button (NEW) -->
+    <nav class="top-nav" aria-label="Top navigation">
+        <a class="nav-btn" href="book.html">Book</a>
+    </nav>
+
     <div class="logo-container">
         <!-- Login Trigger on Click -->
         <a href="#" id="login-trigger" class="logo-link" title="Click to Login">
@@ -161,7 +205,7 @@
         </a>
         <p style="font-size: 0.8em; color: #888; margin-top: 5px;">(Click logo to login)</p>
     </div>
-    
+
     <div class="chat-box">
         <div class="chat-history" id="chat-history"></div>
         <textarea class="chat-input" id="chat-input" placeholder="Chat wif Biltong.ai"></textarea>
@@ -196,18 +240,18 @@
 
         // Handle Logo Click
         const loginTrigger = document.getElementById('login-trigger');
-        
+
         loginTrigger.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            
+            e.preventDefault();
+
             console.log("Attempting login...");
-            
+
             signInWithPopup(auth, provider)
                 .then((result) => {
                     const user = result.user;
                     console.log("User logged in:", user.displayName);
                     alert("Lekker! Welcome " + user.displayName);
-                    
+
                     // Redirect to the practice page after successful login
                     window.location.href = "practice.html";
                 })
