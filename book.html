@@ -17,11 +17,8 @@
             font-family: 'Arial', sans-serif;
             color: #ffffff;
             min-height: 100vh;
-
-            /* Allow scrolling */
             overflow-x: hidden;
             overflow-y: auto;
-
             position: relative;
         }
 
@@ -48,7 +45,7 @@
         .top-nav {
             position: sticky;
             top: 0;
-            padding: 18px 0 10px;
+            padding: 12px 0 10px; /* reduced */
             display: flex;
             justify-content: center;
             z-index: 10;
@@ -80,10 +77,10 @@
         .page {
             width: min(980px, 92vw);
             margin: 0 auto;
-            padding: 40px 0 70px;
+            padding: 8px 0 40px; /* reduced top padding */
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 0; /* no extra gap above image */
             align-items: center;
         }
 
@@ -120,12 +117,6 @@
             display: block;
         }
 
-        /* Extra height so scrolling is natural */
-        .spacer {
-            height: 40vh;
-            width: 100%;
-        }
-
         @media (prefers-reduced-motion: reduce) {
             .reveal {
                 transition: none;
@@ -141,29 +132,25 @@
     </nav>
 
     <div class="page">
-        <div class="spacer" aria-hidden="true"></div>
-
-        <main class="card reveal" id="book-card">
+        <main class="card reveal is-visible" id="book-card">
             <img class="book-img" src="Book.jpeg" alt="Book" loading="lazy" />
         </main>
-
-        <div class="spacer" aria-hidden="true"></div>
     </div>
 
     <script>
-        // Reveal the image card gracefully when it scrolls into view
-        const target = document.getElementById('book-card');
-
-        const observer = new IntersectionObserver((entries) => {
-            for (const entry of entries) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
-                }
-            }
-        }, { threshold: 0.15 });
-
-        observer.observe(target);
+        // If you still want the graceful reveal, remove the "is-visible" class above
+        // and use this observer. Keeping it here in case you want it back.
+        // const target = document.getElementById('book-card');
+        // target.classList.remove('is-visible');
+        // const observer = new IntersectionObserver((entries) => {
+        //     for (const entry of entries) {
+        //         if (entry.isIntersecting) {
+        //             entry.target.classList.add('is-visible');
+        //             observer.unobserve(entry.target);
+        //         }
+        //     }
+        // }, { threshold: 0.15 });
+        // observer.observe(target);
     </script>
 </body>
 </html>
